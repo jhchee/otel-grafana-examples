@@ -1,7 +1,7 @@
 name: otel-grafana-examples
 services:
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.3.0
     ports:
       - "3000:3000"
     volumes:
@@ -21,7 +21,7 @@ services:
       - prometheus
 
   tempo:
-    image: grafana/tempo:latest
+    image: grafana/tempo:2.9.0
     command: ["-config.file=/etc/tempo.yaml"]
     volumes:
       - ./tempo.yaml:/etc/tempo.yaml
@@ -57,7 +57,7 @@ services:
       - ./tempo-data:/var/tempo
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.8.0
     container_name: prometheus
     command:
       - --config.file=/etc/prometheus/prometheus-config.yaml
@@ -78,16 +78,17 @@ services:
       - grafana-network
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.114.0
+    image: otel/opentelemetry-collector-contrib:0.139.0
     command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
       - "1888:1888" # pprof extension
-      - "8888:8888" # Prometheus metrics exposed by the collector
+      # - "8888:8888" # Prometheus metrics exposed by the collector
       #      - "8889:8889"   # Prometheus exporter metrics
       - "13133:13133" # health_check extension
-      - "4318:4318" # otlp receiver
+      - "4318:4318" # otlp http receiver
+      - "4317:4317" # otlp grpc receiver
       - "55679:55679" # zpages extension
     depends_on:
       - tempo
@@ -97,7 +98,7 @@ services:
       - grafana-network
 
   loki:
-    image: grafana/loki:latest
+    image: grafana/loki:3.6.2
     container_name: loki
     ports:
       - "3100:3100"
