@@ -39,7 +39,6 @@ datasources:
         tags:
           - key: "service.name"
             value: "service_name"
-        #    query: 'method="$${__span.tags.method}"'
       #      tracesToMetrics:
       #        datasourceUid: 'prom'
       #        spanStartTimeShift: '-1h'
@@ -56,10 +55,12 @@ datasources:
       #        query: 'method="$${__span.tags.method}"'
       serviceMap:
         datasourceUid: "prom"
-#      nodeGraph:
-#        enabled: true
-#      search:
-#        hide: false
+      nodeGraph:
+        enabled: true
+      search:
+        hide: false
+      lokiSearch:
+        datasourceUid: "loki"
 #      traceQuery:
 #        timeShiftEnabled: true
 #        spanStartTimeShift: '-1h'
