@@ -10,6 +10,10 @@ datasources:
     editable: true
     jsonData:
       httpMethod: GET
+      exemplarTraceIdDestinations:
+        - name: trace_id
+          datasourceUid: tempo
+          urlDisplayLabel: "Trace: $${__value.raw}"
   - name: Loki
     uid: loki
     type: loki
