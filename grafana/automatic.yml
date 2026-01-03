@@ -10,7 +10,6 @@ datasources:
     editable: true
     jsonData:
       httpMethod: GET
-
   - name: Loki
     uid: loki
     type: loki
@@ -20,6 +19,13 @@ datasources:
     editable: true
     jsonData:
       maxLines: 1000
+      derivedFields:
+        - name: "trace_id"
+          matcherType: "label"
+          matcherRegex: "trace_id"
+          url: "$${__value.raw}"
+          datasourceUid: "tempo"
+          urlDisplayLabel: "Trace: $${__value.raw}"
   - name: Tempo
     type: tempo
     uid: tempo
